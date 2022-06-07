@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Grades Situation{% endblock %}</title>
+    </head>
+    <body>
+        {% block body %}
+
+            <div class="container">
+                <h1 class="title">Grades Situation</h1>
+                <div class="info">
+                    <p>School: {{ school.name }}, {{ school.cui }}</p>
+                    <p>Student: {{ student.firstName }}, {{ student.lastName }}</p>
+                    <p>PIN: {{ student.pin }}</p>
+                    <p>Date: {{ "now" | date("d/m/Y") }}</p>
+                </div>
+                <div class="table">
+                    <table>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Grades</th>
+                            <th>Average Score</th>
+                        </tr>
+                        {% for sit in situation %}
+                            <tr>
+                                <td>{{ sit.subject.name }}</td>
+                                <td>
+                                    {% for grade in sit.grades %}
+                                        {{ grade.grade }}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% if sit.averageScore is not null %}
+                                        {{ sit.averageScore }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+        {% endblock %}
+    </body>
+</html>
