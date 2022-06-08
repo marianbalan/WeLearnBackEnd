@@ -27,8 +27,6 @@ class GradeService
 
     public function addGrade(GradeDto $gradeDto): GradeViewModel
     {
-        $this->gradeValidator->validate($gradeDto);
-
         $student = $this->userRepository->find($gradeDto->getStudentId());
         if (null === $student) {
             throw new ServiceException('Student does not exist!');
@@ -43,6 +41,7 @@ class GradeService
             ->setStudent($student)
             ->setSubject($subject);
 
+        $this->gradeValidator->validate($grade);
         $this->gradeRepository->add($grade);
 
         return GradeMapper::gradeToGradeViewModel($grade);

@@ -28,8 +28,6 @@ class SubjectService
 
     public function addSubject(SubjectDto $subjectDto): SubjectViewModel
     {
-        $this->subjectValidator->validate($subjectDto);
-
         $studyGroup = $this->studyGroupRepository->find($subjectDto->getStudyGroupId());
         if (null === $studyGroup) {
             throw new ServiceException('Study group does not exist!');
@@ -43,6 +41,8 @@ class SubjectService
         $subject = SubjectMapper::subjectDtoToSubject($subjectDto)
             ->setStudyGroup($studyGroup)
             ->setTeacher($teacher);
+
+        $this->subjectValidator->validate($subject);
 
         $this->subjectRepository->add($subject);
 
@@ -94,14 +94,14 @@ class SubjectService
 
     public function updateSubject(int $id, SubjectDto $subjectDto): SubjectViewModel
     {
-        $this->subjectValidator->validate($subjectDto);
-
         $subject = $this->subjectRepository->find($id);
         if (null === $subject) {
             throw new ServiceException('Subject does not exist!');
         }
 
         $subject = $this->updateSubjectWithSubjectDtoFeatures($subject, $subjectDto);
+
+        $this->subjectValidator->validate($subject);
         $this->subjectRepository->update($subject);
 
         return SubjectMapper::subjectToSubjectViewModel($subject);

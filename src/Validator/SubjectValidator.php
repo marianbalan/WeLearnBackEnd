@@ -2,7 +2,7 @@
 
 namespace App\Validator;
 
-use App\Dto\Dto\SubjectDto;
+use App\Entity\Subject;
 use App\Validator\Exception\ValidationException;
 
 class SubjectValidator
@@ -10,7 +10,7 @@ class SubjectValidator
     /**
      * @throws ValidationException
      */
-    public function validate(SubjectDto $entity): void
+    public function validate(Subject $entity): void
     {
         $errorMessage = '';
 

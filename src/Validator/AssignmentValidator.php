@@ -2,7 +2,7 @@
 
 namespace App\Validator;
 
-use App\Dto\Dto\AssignmentDto;
+use App\Entity\Assignment;
 use App\Validator\Exception\ValidationException;
 
 class AssignmentValidator
@@ -10,7 +10,7 @@ class AssignmentValidator
     /**
      * @throws ValidationException
      */
-    public function validate(AssignmentDto $entity): void
+    public function validate(Assignment $entity): void
     {
         $errorMessage = '';
 

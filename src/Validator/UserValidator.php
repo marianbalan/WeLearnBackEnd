@@ -2,7 +2,7 @@
 
 namespace App\Validator;
 
-use App\Dto\Dto\UserDto;
+use App\Entity\User;
 use App\Validator\Exception\ValidationException;
 
 class UserValidator
@@ -10,7 +10,7 @@ class UserValidator
     /**
      * @throws ValidationException
      */
-    public function validate(UserDto $entity): void
+    public function validate(User $entity): void
     {
         $errorMessage = '';
 

@@ -90,5 +90,10 @@ class NlpScriptHelper
             ),
             fn (NlpOutput $output) => $output->getSimilarityRate() > self::MIN_SIMILARITY_RATE
         ));
+//        return $this->serializer->deserialize(
+//                str_replace("'", '"', $output[0]),
+//                NlpOutput::class . '[]',
+//                JsonEncoder::FORMAT
+//            );
     }
 }

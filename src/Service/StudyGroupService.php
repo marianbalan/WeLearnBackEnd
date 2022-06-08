@@ -28,8 +28,6 @@ class StudyGroupService
 
     public function addStudyGroup(StudyGroupDto $studyGroupDto): StudyGroupViewModel
     {
-        $this->studyGroupValidator->validate($studyGroupDto);
-
         $school = $this->schoolRepository->find($studyGroupDto->getSchoolId());
         if (null === $school) {
             throw new ServiceException('School does not exist!');
@@ -43,6 +41,8 @@ class StudyGroupService
         $studyGroup = StudyGroupMapper::studyGroupDtoToStudyGroup($studyGroupDto)
             ->setSchool($school)
             ->setClassMaster($classMaster);
+
+        $this->studyGroupValidator->validate($studyGroup);
         $this->studyGroupRepository->add($studyGroup);
 
         $classMaster->addRole(UserRole::CLASS_MASTER)->setStudyGroup($studyGroup);
@@ -53,14 +53,14 @@ class StudyGroupService
 
     public function updateStudyGroup(int $id, StudyGroupDto $studyGroupDto): StudyGroupViewModel
     {
-        $this->studyGroupValidator->validate($studyGroupDto);
-
         $studyGroup = $this->studyGroupRepository->find($id);
         if (null === $studyGroup) {
             throw new ServiceException('Study group does not exist!');
         }
 
         $studyGroup = $this->updateStudyGroupWithStudyGroupDtoFeatures($studyGroup, $studyGroupDto);
+
+        $this->studyGroupValidator->validate($studyGroup);
         $this->studyGroupRepository->update($studyGroup);
 
         return StudyGroupMapper::studyGroupToStudyGroupViewModel($studyGroup);

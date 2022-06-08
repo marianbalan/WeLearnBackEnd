@@ -40,9 +40,6 @@ class UserService
      */
     public function register(UserDto $userDto, SchoolDto $schoolDto): UserViewModel
     {
-        $this->userValidator->validate($userDto);
-        $this->schoolValidator->validate($schoolDto);
-
         $existingUser = $this->userRepository->findByEmail($userDto->getEmail());
 
         if (null !== $existingUser) {
@@ -64,6 +61,9 @@ class UserService
             ->setActivated(false)
             ->setSchool($school);
         $user->setActivationToken($this->jwtManagerService->generateConfirmationToken($user));
+
+        $this->userValidator->validate($user);
+        $this->schoolValidator->validate($school);
 
         $this->schoolRepository->add($school);
         $this->userRepository->add($user);

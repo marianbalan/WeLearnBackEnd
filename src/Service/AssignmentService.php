@@ -72,8 +72,6 @@ class AssignmentService
 
     public function addAssignment(AssignmentDto $assignmentDto): AssignmentViewModel
     {
-        $this->assignmentValidator->validate($assignmentDto);
-
         $subject = $this->subjectRepository->find($assignmentDto->getSubjectId());
         if (null === $subject) {
             throw new ServiceException('Subject does not exist!');
@@ -83,6 +81,9 @@ class AssignmentService
             ->setSubject($subject)
             ->setRequirementFilePath(null)
             ->setClosed(false);
+
+        $this->assignmentValidator->validate($assignment);
+
         $this->assignmentRepository->add($assignment);
 
         return AssignmentMapper::assignmentToAssignmentViewModel($assignment);
@@ -101,14 +102,14 @@ class AssignmentService
 
     public function updateAssignment(int $id, AssignmentDto $assignmentDto): AssignmentViewModel
     {
-        $this->assignmentValidator->validate($assignmentDto);
-
         $assignment = $this->assignmentRepository->find($id);
         if (null === $assignment) {
             throw new ServiceException('Assignment does not exist!');
         }
 
         $editedAssignment = $this->updateAssignmentWithAssignmentDtoFeatures($assignment, $assignmentDto);
+        $this->assignmentValidator->validate($editedAssignment);
+
         $this->assignmentRepository->update($editedAssignment);
 
         return AssignmentMapper::assignmentToAssignmentViewModel($editedAssignment);

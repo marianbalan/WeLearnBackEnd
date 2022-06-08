@@ -2,7 +2,7 @@
 
 namespace App\Validator;
 
-use App\Dto\Dto\StudyGroupDto;
+use App\Entity\StudyGroup;
 use App\Validator\Exception\ValidationException;
 
 class StudyGroupValidator
@@ -10,7 +10,7 @@ class StudyGroupValidator
     /**
      * @throws ValidationException
      */
-    public function validate(StudyGroupDto $entity): void
+    public function validate(StudyGroup $entity): void
     {
         $errorMessage = '';
 

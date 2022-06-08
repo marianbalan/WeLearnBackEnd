@@ -1,10 +1,12 @@
 import sys
 import os
-import unidecode
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from tika import parser
+import re
+from nltk.corpus import stopwords
+from sklearn.feature_extraction import text
 
 
 def readInputFile(path: str):
@@ -18,7 +20,11 @@ def readFiles(file_names: list):
     student_notes = []
     for file in file_names:
         raw = parser.from_file(file)
-        student_notes.append(unidecode.unidecode(raw['content'].replace('\n', '')))
+        text = raw['content'].replace('\n', ' ').strip()
+        text = re.sub(r'[^\w\s]', '', text)
+        shortword = re.compile(r'\W*\b\w{1,3}\b')
+        text = shortword.sub('', text)
+        student_notes.append(text)
     return student_notes
 
 
@@ -63,7 +69,9 @@ def check_plagiarism_for_one_file(student_note_vector, other_note_vectors):
     return plagiarism_results
 
 
-vectorize = lambda Text: TfidfVectorizer().fit_transform(Text).toarray()
+ro_stop_words = set(stopwords.words('romanian'))
+stop_words = text.ENGLISH_STOP_WORDS.union(ro_stop_words).union(['printr'])
+vectorize = lambda Text: TfidfVectorizer(stop_words=stop_words).fit_transform(Text).toarray()
 similarity = lambda doc1, doc2: cosine_similarity([doc1, doc2])
 
 
